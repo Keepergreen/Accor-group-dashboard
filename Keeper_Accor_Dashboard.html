@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keeper × Accor — Group Diversion Dashboard</title>
+<style>
+  :root {
+    --green-900: #07261e;
+    --green-800: #0d4d3c;
+    --green-700: #155a47;
+    --green-600: #1d6b56;
+    --green-500: #2a8268;
+    --green-100: #f3f6f5;
+    --green-50: #fafbfb;
+    --gold-700: #b8924a;
+    --gold-600: #c9a961;
+    --gold-200: #f7f5ee;
+    --ink-900: #0a1410;
+    --ink-700: #1a2332;
+    --ink-500: #3a4a58;
+    --ink-300: #5a6b78;
+    --ink-200: #8a96a0;
+    --line: #d4dde2;
+    --line-soft: #e6ecef;
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--green-50);
+    color: var(--ink-700);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  /* HEADER */
+  header.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .brand-block { display: flex; align-items: center; gap: 16px; }
+  .logo-mark {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--green-800);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 22px;
+    font-family: var(--serif);
+  }
+  .brand-text .name {
+    font-size: 22px; font-weight: 700;
+    color: var(--green-800);
+    letter-spacing: -0.3px;
+    font-family: var(--serif);
+  }
+  .brand-text .name .x {
+    color: var(--gold-600);
+    font-style: italic;
+    font-weight: 600;
+    margin: 0 4px;
+  }
+  .brand-text .tag {
+    font-size: 11.5px;
+    color: var(--ink-300);
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .meta { text-align: right; font-size: 12px; color: var(--ink-300); }
+  .meta .label {
+    color: var(--green-800);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-size: 10.5px;
+  }
+  .meta .pulse {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--green-100);
+    border-radius: 100px;
+    margin-top: 6px;
+  }
+  .meta .pulse::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green-800);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* HERO */
+  .hero { margin-bottom: 32px; }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--green-800);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold-600); font-weight: 400; }
+  .hero .lede {
+    font-size: 15px;
+    color: var(--ink-500);
+    line-height: 1.55;
+    max-width: 920px;
+  }
+  .hero .lede strong { color: var(--green-800); font-weight: 700; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 2px rgba(7, 38, 30, 0.04);
+  }
+  .filter-bar .row {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filter-bar > .row > .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--green-800);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .filter-groups { display: flex; gap: 20px; flex-wrap: wrap; flex: 1; }
+  .filter-group { display: flex; flex-direction: column; gap: 6px; }
+  .filter-group .group-label {
+    font-size: 10.5px;
+    color: var(--ink-300);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--ink-500);
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--green-700); color: var(--green-800); }
+  .chip.active {
+    background: var(--green-800);
+    color: #fff;
+    border-color: var(--green-800);
+  }
+  .chip.active.gold {
+    background: var(--gold-600);
+    border-color: var(--gold-600);
+    color: var(--green-900);
+  }
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-300);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .reset-btn:hover { color: var(--green-800); border-color: var(--green-800); }
+
+  .result-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding: 0 4px;
+  }
+  .result-meta .scope { font-size: 13px; color: var(--ink-500); }
+  .result-meta .scope strong { color: var(--green-800); font-weight: 700; }
+  .result-meta .scope .arrow { color: var(--gold-600); margin: 0 6px; }
+
+  /* HERO STATS */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--green-800);
+    color: #fff;
+    border-radius: 12px;
+    padding: 18px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card.gold { background: linear-gradient(135deg, var(--gold-700) 0%, var(--gold-600) 100%); }
+  .stat-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(255,255,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .stat-card .num {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -1.5px;
+  }
+  .stat-card .num small { font-size: 18px; font-weight: 600; opacity: 0.85; margin-left: 2px; }
+  .stat-card .lbl {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+    margin-top: 12px;
+    opacity: 0.92;
+  }
+  .stat-card .sublbl { font-size: 11.5px; margin-top: 4px; opacity: 0.78; }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 1px 2px rgba(7, 38, 30, 0.04);
+  }
+  .card-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .card-header h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green-800);
+    letter-spacing: -0.3px;
+  }
+  .card-header .sub {
+    font-size: 11.5px;
+    color: var(--ink-300);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  table.pilot-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .pilot-table th {
+    text-align: left;
+    padding: 8px 10px;
+    background: var(--green-100);
+    color: var(--green-800);
+    font-weight: 700;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--line);
+  }
+  .pilot-table td {
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: top;
+  }
+  .pilot-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .pilot-table .pilot-name { font-weight: 700; color: var(--ink-700); }
+  .pilot-table .pilot-meta {
+    font-size: 11px;
+    color: var(--ink-300);
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+  .pilot-table tr.total-row {
+    background: var(--green-800);
+    color: #fff;
+    font-weight: 700;
+  }
+  .pilot-table tr.total-row td { border: none; padding: 11px 10px; }
+  .pilot-table tr.total-row .pilot-name { color: #fff; }
+
+  /* CHARTS - SVG */
+  .chart-area { position: relative; }
+  .chart-area svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart-bar { transition: opacity 0.2s ease; cursor: pointer; }
+  .chart-bar:hover { opacity: 0.85; }
+  .chart-label { fill: var(--ink-700); font-size: 11.5px; font-weight: 500; font-family: var(--sans); }
+  .chart-value-label {
+    fill: var(--ink-700);
+    font-size: 10.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    font-family: var(--sans);
+  }
+  .chart-empty {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--ink-300);
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  .pie-wrap { display: flex; align-items: center; gap: 24px; }
+  .pie-svg-wrap { flex-shrink: 0; }
+  .pie-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+  .pie-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+  }
+  .pie-legend-item .swatch {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .pie-legend-item .lname { font-weight: 700; color: var(--ink-700); }
+  .pie-legend-item .lvalue {
+    color: var(--ink-300);
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+  }
+
+  /* PNL */
+  .pnl-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 1100px) { .pnl-grid { grid-template-columns: repeat(2, 1fr); } }
+  .pnl-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+  .pnl-card:hover { transform: translateY(-2px); border-color: var(--green-700); }
+  .pnl-card .accent-bar {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 3px;
+  }
+  .pnl-card.proc .accent-bar { background: var(--gold-600); }
+  .pnl-card.owner .accent-bar { background: var(--gold-700); }
+  .pnl-card.fin .accent-bar { background: var(--green-700); }
+  .pnl-card.csrd .accent-bar { background: var(--green-800); }
+  .pnl-card .ledger {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    font-weight: 700;
+    color: var(--ink-300);
+    margin-bottom: 6px;
+    margin-top: 4px;
+  }
+  .pnl-card .h {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green-800);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .pnl-card .feeds {
+    font-size: 10.5px;
+    color: var(--ink-300);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .pnl-card .signal {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green-800);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .pnl-card.proc .signal { color: var(--gold-700); }
+  .pnl-card .signal small { font-size: 12px; font-weight: 600; opacity: 0.7; }
+  .pnl-card .desc {
+    font-size: 11px;
+    color: var(--ink-500);
+    line-height: 1.4;
+    margin-top: 8px;
+  }
+
+  /* PROJECTION */
+  .projection {
+    background: var(--green-900);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .projection::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 100% 0%, rgba(201, 169, 97, 0.18) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(13, 77, 60, 0.4) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .projection .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    position: relative;
+  }
+  .projection h3 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+  .projection h3 em { color: var(--gold-600); font-style: italic; font-weight: 400; }
+  .projection .lede {
+    font-size: 13px;
+    color: rgba(255,255,255,0.78);
+    line-height: 1.5;
+    max-width: 600px;
+  }
+  .projection .lede strong { color: var(--gold-600); }
+  .projection .toggle {
+    display: flex;
+    gap: 4px;
+    background: rgba(0,0,0,0.25);
+    padding: 4px;
+    border-radius: 100px;
+    flex-shrink: 0;
+  }
+  .projection .toggle button {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.65);
+    padding: 7px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .projection .toggle button:hover { color: #fff; }
+  .projection .toggle button.active { background: var(--gold-600); color: var(--green-900); }
+  .projection .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 24px;
+    position: relative;
+  }
+  .projection .stat .num {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold-600);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .projection .stat .num small {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    margin-left: 2px;
+    font-weight: 500;
+  }
+  .projection .stat .lbl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+  .projection .stat .compare { font-size: 11px; color: var(--gold-600); margin-top: 4px; font-weight: 600; }
+
+  /* NOTES */
+  .notes {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 18px;
+  }
+  .notes-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .notes h4 {
+    font-size: 11.5px;
+    color: var(--green-800);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 700;
+  }
+  .notes .save-status { font-size: 10.5px; color: var(--ink-200); font-style: italic; }
+  .notes textarea {
+    width: 100%;
+    min-height: 60px;
+    border: none;
+    background: var(--green-50);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ink-700);
+    resize: vertical;
+    line-height: 1.5;
+  }
+  .notes textarea:focus {
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--green-700);
+  }
+  .notes textarea::placeholder { color: var(--ink-200); }
+
+  footer.app-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: var(--ink-300);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  footer .label { color: var(--green-800); font-weight: 700; }
+
+  .section-title {
+    margin-top: 24px;
+    margin-bottom: 14px;
+    padding: 0 4px;
+  }
+  .section-title h3 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--green-800);
+    letter-spacing: -0.3px;
+  }
+  .section-title .sub {
+    font-size: 11.5px;
+    color: var(--ink-300);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 900px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 32px; }
+    .projection .grid { grid-template-columns: repeat(2, 1fr); }
+    .projection .top { flex-direction: column; gap: 16px; }
+    .pie-wrap { flex-direction: column; align-items: center; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stat-card, .pnl-card, .card { animation: fadeUp 0.4s ease backwards; }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.10s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.20s; }
+  .stat-card:nth-child(5) { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <header class="app-header">
+    <div class="brand-block">
+      <div class="logo-mark">K</div>
+      <div class="brand-text">
+        <div class="name">Keeper <span class="x">×</span> Accor</div>
+        <div class="tag">Group Diversion Dashboard · Phase 1 Preview</div>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="label">Phase 1 · Live</div>
+      <div class="pulse">3 verified pilots · Bali · 2025–2026</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>Three pilots today.<br><em>The same lens, scaled.</em></h1>
+    <div class="lede">This dashboard is built from the verified data of three Accor pilots in Bali — Pullman Legian Beach, Mövenpick, and Peppers Seminyak. <strong>Filter by region, brand tier, asset category or disposal channel</strong> to see how Group-level Keeper data would surface — applied against the four P&amp;L vectors discussed: procurement intelligence, owner relations, financing margin, and CSRD voluntary scope.</div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="row">
+      <div class="label">Filter</div>
+      <div class="filter-groups" id="filter-groups"></div>
+      <button class="reset-btn" id="reset-btn">Reset</button>
+    </div>
+  </div>
+
+  <div class="result-meta">
+    <div class="scope" id="scope-line"></div>
+  </div>
+
+  <div class="stat-row" id="stat-row"></div>
+
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-header">
+        <h3>By pilot</h3>
+        <div class="sub">Each row scales with current filter</div>
+      </div>
+      <div id="pilot-table-wrap"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>CO₂e by asset category</h3>
+        <div class="sub" id="cat-chart-sub"></div>
+      </div>
+      <div id="cat-co2-chart" class="chart-area"></div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div class="card">
+      <div class="card-header">
+        <h3>Items diverted by category</h3>
+        <div class="sub">Volume distribution across selection</div>
+      </div>
+      <div id="cat-items-chart" class="chart-area"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>Disposal channel mix</h3>
+        <div class="sub">By weight diverted</div>
+      </div>
+      <div id="channel-chart" class="chart-area"></div>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h3>Where this data lands on Accor's P&amp;L</h3>
+    <div class="sub">Each filtered view feeds the four financial vectors</div>
+  </div>
+
+  <div class="pnl-grid" id="pnl-grid"></div>
+
+  <div class="projection" id="projection"></div>
+
+  <div class="notes">
+    <div class="notes-header">
+      <h4>Joy's notes — for internal forwarding</h4>
+      <div class="save-status" id="save-status">Saves automatically</div>
+    </div>
+    <textarea id="notes-textarea" placeholder="Use this space to jot questions or reactions for your sustainability, innovation or CFO colleagues. Notes save locally to your browser."></textarea>
+  </div>
+
+  <footer class="app-footer">
+    <div>
+      <span class="label">Keeper × Accor — Group Diversion Dashboard</span>
+      &nbsp;·&nbsp; Phase 1 preview · 3 verified pilots · methodology: DEFRA 2023 · GHG Protocol Cat. 5 · Carbon Trust LCA · WRAP CarbonWARM2
+    </div>
+    <div>keeper.green</div>
+  </footer>
+
+</div>
+
+<script>
+'use strict';
+
+// ===== DATA =====
+const PILOT_DATA = [
+  { hotel: "Pullman Legian Beach", region: "Bali", brandTier: "Premium", hotelType: "Resort \u00b7 Beachfront", rooms: 360,
+    category: "Televisions", channel: "Resale", verifiedBy: "Keeper",
+    items: 78, weight: 614, co2e: 7800, revenue: 50100000, people: 0 },
+  { hotel: "Pullman Legian Beach", region: "Bali", brandTier: "Premium", hotelType: "Resort \u00b7 Beachfront", rooms: 360,
+    category: "Uniforms", channel: "Donation", verifiedBy: "Keeper",
+    items: 325, weight: 109, co2e: 54, revenue: 0, people: 140 },
+  { hotel: "Pullman Legian Beach", region: "Bali", brandTier: "Premium", hotelType: "Resort \u00b7 Beachfront", rooms: 360,
+    category: "Linen & Towels", channel: "Resale", verifiedBy: "Hotel-attested",
+    items: 1908, weight: 668, co2e: 329, revenue: 23000000, people: 0 },
+  { hotel: "Pullman Legian Beach", region: "Bali", brandTier: "Premium", hotelType: "Resort \u00b7 Beachfront", rooms: 360,
+    category: "Room Disposal", channel: "Resale", verifiedBy: "Hotel-attested",
+    items: 482, weight: 347, co2e: 146, revenue: 0, people: 0 },
+  { hotel: "Pullman Legian Beach", region: "Bali", brandTier: "Premium", hotelType: "Resort \u00b7 Beachfront", rooms: 360,
+    category: "Engineering & FF&E", channel: "Resale", verifiedBy: "Hotel-attested",
+    items: 136, weight: 1881, co2e: 505, revenue: 5100000, people: 0 },
+  { hotel: "M\u00f6venpick", region: "Bali", brandTier: "Upscale", hotelType: "Urban / Resort", rooms: 300,
+    category: "Linen & Towels", channel: "Donation", verifiedBy: "Keeper",
+    items: 5047, weight: 2025, co2e: 996, revenue: 0, people: 1000 },
+  { hotel: "Peppers Seminyak", region: "Bali", brandTier: "Upscale", hotelType: "Boutique Resort", rooms: 100,
+    category: "Televisions", channel: "Donation", verifiedBy: "Keeper",
+    items: 30, weight: 236, co2e: 3000, revenue: 0, people: 2000 },
+];
+
+const FILTER_DIMENSIONS = [
+  { key: "region", label: "Region", options: ["All", "Bali"] },
+  { key: "brandTier", label: "Brand Tier", options: ["All", "Premium", "Upscale"] },
+  { key: "category", label: "Asset Category", options: ["All", "Televisions", "Uniforms", "Linen & Towels", "Room Disposal", "Engineering & FF&E"] },
+  { key: "channel", label: "Disposal Channel", options: ["All", "Resale", "Donation"] },
+];
+
+const CATEGORY_COLORS = {
+  "Televisions": "#b8924a",
+  "Uniforms": "#c9a961",
+  "Linen & Towels": "#0d4d3c",
+  "Room Disposal": "#1d6b56",
+  "Engineering & FF&E": "#155a47",
+};
+
+// ===== STATE =====
+let filters = { region: "All", brandTier: "All", category: "All", channel: "All" };
+let coverage = 25;
+
+// ===== HELPERS =====
+function fmt(n) { return Math.round(n).toLocaleString(); }
+function fmtIDR(n) {
+  if (n >= 1000000) return "IDR " + (n/1000000).toFixed(1) + "M";
+  if (n >= 1000) return "IDR " + (n/1000).toFixed(0) + "K";
+  return "IDR " + n;
+}
+function fmtKg(n) {
+  return n >= 1000 ? (n/1000).toFixed(2) + " t" : fmt(n) + " kg";
+}
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ===== FILTERING & AGGREGATION =====
+function getFiltered() {
+  return PILOT_DATA.filter(function(r) {
+    return (filters.region === "All" || r.region === filters.region) &&
+           (filters.brandTier === "All" || r.brandTier === filters.brandTier) &&
+           (filters.category === "All" || r.category === filters.category) &&
+           (filters.channel === "All" || r.channel === filters.channel);
+  });
+}
+
+function getTotals(rows) {
+  var t = { items: 0, weight: 0, co2e: 0, revenue: 0, people: 0 };
+  for (var i = 0; i < rows.length; i++) {
+    t.items += rows[i].items;
+    t.weight += rows[i].weight;
+    t.co2e += rows[i].co2e;
+    t.revenue += rows[i].revenue;
+    t.people += rows[i].people;
+  }
+  var hotelSet = {};
+  rows.forEach(function(r) { hotelSet[r.hotel] = true; });
+  t.hotels = Object.keys(hotelSet).length;
+  return t;
+}
+
+function getByPilot(rows) {
+  var map = {};
+  rows.forEach(function(r) {
+    if (!map[r.hotel]) {
+      map[r.hotel] = {
+        hotel: r.hotel, brandTier: r.brandTier, hotelType: r.hotelType, rooms: r.rooms,
+        items: 0, weight: 0, co2e: 0, revenue: 0, people: 0
+      };
+    }
+    var p = map[r.hotel];
+    p.items += r.items; p.weight += r.weight; p.co2e += r.co2e;
+    p.revenue += r.revenue; p.people += r.people;
+  });
+  var order = ["Pullman Legian Beach", "M\u00f6venpick", "Peppers Seminyak"];
+  return order.map(function(h) { return map[h]; }).filter(function(x) { return !!x; });
+}
+
+function getByCategory(rows) {
+  var map = {};
+  rows.forEach(function(r) {
+    if (!map[r.category]) map[r.category] = { name: r.category, weight: 0, co2e: 0, items: 0 };
+    map[r.category].weight += r.weight;
+    map[r.category].co2e += r.co2e;
+    map[r.category].items += r.items;
+  });
+  return Object.keys(map).map(function(k) { return map[k]; }).sort(function(a, b) { return b.co2e - a.co2e; });
+}
+
+function getByChannel(rows) {
+  var map = {};
+  rows.forEach(function(r) {
+    if (!map[r.channel]) map[r.channel] = { name: r.channel, value: 0 };
+    map[r.channel].value += r.weight;
+  });
+  return Object.keys(map).map(function(k) { return map[k]; });
+}
+
+// ===== RENDERING =====
+
+function renderFilterBar() {
+  var container = document.getElementById('filter-groups');
+  var html = FILTER_DIMENSIONS.map(function(dim) {
+    return '<div class="filter-group">' +
+      '<div class="group-label">' + escapeHtml(dim.label) + '</div>' +
+      '<div class="chips">' +
+      dim.options.map(function(opt) {
+        var isActive = filters[dim.key] === opt;
+        var isGold = dim.key === 'channel' && opt !== 'All' && isActive;
+        return '<button class="chip' + (isActive ? ' active' : '') + (isGold ? ' gold' : '') +
+          '" data-key="' + escapeHtml(dim.key) + '" data-value="' + escapeHtml(opt) + '">' +
+          escapeHtml(opt) + '</button>';
+      }).join('') +
+      '</div></div>';
+  }).join('');
+  container.innerHTML = html;
+  var chips = container.querySelectorAll('.chip');
+  for (var i = 0; i < chips.length; i++) {
+    chips[i].addEventListener('click', function() {
+      filters[this.getAttribute('data-key')] = this.getAttribute('data-value');
+      renderAll();
+    });
+  }
+}
+
+function renderScope() {
+  var filtered = getFiltered();
+  var totals = getTotals(filtered);
+  var parts = [];
+  if (filters.region !== "All") parts.push(filters.region);
+  if (filters.brandTier !== "All") parts.push(filters.brandTier + " tier");
+  if (filters.category !== "All") parts.push(filters.category.toLowerCase());
+  if (filters.channel !== "All") parts.push(filters.channel.toLowerCase() + " only");
+  var scopeDesc = parts.length ? parts.join(" \u00b7 ") : "All pilots \u00b7 all assets";
+
+  document.getElementById('scope-line').innerHTML =
+    'Showing: <strong>' + escapeHtml(scopeDesc) + '</strong>' +
+    '<span class="arrow">\u2192</span>' +
+    '<strong>' + totals.hotels + '</strong> ' + (totals.hotels === 1 ? 'hotel' : 'hotels') + ' \u00b7 ' +
+    '<strong>' + fmt(filtered.length) + '</strong> ' + (filtered.length === 1 ? 'data row' : 'data rows');
+}
+
+function renderStats() {
+  var filtered = getFiltered();
+  var t = getTotals(filtered);
+
+  var stats = [
+    { num: fmt(t.items), label: "Items diverted", sublbl: "across selection", gold: false },
+    { num: fmtKg(t.weight), label: "Waste diverted", sublbl: "from landfill", gold: false },
+    { num: fmtKg(t.co2e), label: "CO\u2082e avoided", sublbl: "GHG Protocol Cat. 5", gold: false },
+    { num: t.people > 0 ? fmt(t.people) + "+" : "\u2014", label: "People supported", sublbl: t.people > 0 ? "community partners" : "donation-only", gold: true },
+    { num: t.revenue > 0 ? fmtIDR(t.revenue) : "\u2014", label: "Recovered value", sublbl: t.revenue > 0 ? "to hotel owners" : "donation-only scope", gold: false },
+  ];
+
+  document.getElementById('stat-row').innerHTML = stats.map(function(s) {
+    return '<div class="stat-card' + (s.gold ? ' gold' : '') + '">' +
+      '<div class="num">' + s.num + '</div>' +
+      '<div class="lbl">' + s.label + '</div>' +
+      '<div class="sublbl">' + s.sublbl + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderPilotTable() {
+  var filtered = getFiltered();
+  var totals = getTotals(filtered);
+  var byPilot = getByPilot(filtered);
+  var wrap = document.getElementById('pilot-table-wrap');
+
+  if (byPilot.length === 0) {
+    wrap.innerHTML = '<div style="padding: 20px 0; color: var(--ink-300); font-size: 13px;">No pilots match this filter combination.</div>';
+    return;
+  }
+
+  var rowsHtml = byPilot.map(function(p) {
+    return '<tr>' +
+      '<td><div class="pilot-name">' + escapeHtml(p.hotel) + '</div>' +
+      '<div class="pilot-meta">' + escapeHtml(p.brandTier) + ' \u00b7 ' + escapeHtml(p.hotelType) + ' \u00b7 ' + p.rooms + ' rooms</div></td>' +
+      '<td class="num">' + fmt(p.items) + '</td>' +
+      '<td class="num">' + fmtKg(p.weight) + '</td>' +
+      '<td class="num">' + fmtKg(p.co2e) + '</td>' +
+      '<td class="num">' + (p.people > 0 ? fmt(p.people) + '+' : '\u2014') + '</td>' +
+      '<td class="num">' + (p.revenue > 0 ? fmtIDR(p.revenue) : '\u2014') + '</td>' +
+      '</tr>';
+  }).join('');
+
+  if (byPilot.length > 1) {
+    rowsHtml += '<tr class="total-row">' +
+      '<td class="pilot-name">Combined</td>' +
+      '<td class="num">' + fmt(totals.items) + '</td>' +
+      '<td class="num">' + fmtKg(totals.weight) + '</td>' +
+      '<td class="num">' + fmtKg(totals.co2e) + '</td>' +
+      '<td class="num">' + (totals.people > 0 ? fmt(totals.people) + '+' : '\u2014') + '</td>' +
+      '<td class="num">' + (totals.revenue > 0 ? fmtIDR(totals.revenue) : '\u2014') + '</td>' +
+      '</tr>';
+  }
+
+  wrap.innerHTML = '<table class="pilot-table">' +
+    '<thead><tr><th>Property</th><th class="num">Items</th><th class="num">Weight</th><th class="num">CO\u2082e</th><th class="num">People</th><th class="num">Revenue</th></tr></thead>' +
+    '<tbody>' + rowsHtml + '</tbody></table>';
+}
+
+function renderHorizontalBarChart(containerId, data, valueKey, valueFormat, label) {
+  var container = document.getElementById(containerId);
+  if (data.length === 0) {
+    container.innerHTML = '<div class="chart-empty">No data in current scope.</div>';
+    return;
+  }
+
+  var W = 600, leftPad = 150, rightPad = 80, topPad = 8, rowH = 36;
+  var H = topPad + data.length * rowH + 16;
+  var maxVal = 0;
+  data.forEach(function(d) { if (d[valueKey] > maxVal) maxVal = d[valueKey]; });
+  if (maxVal === 0) maxVal = 1;
+  var barWidth = W - leftPad - rightPad;
+
+  var bars = data.map(function(d, i) {
+    var y = topPad + i * rowH + 4;
+    var w = (d[valueKey] / maxVal) * barWidth;
+    var color = CATEGORY_COLORS[d.name] || '#155a47';
+    return '<rect class="chart-bar" x="' + leftPad + '" y="' + y + '" width="' + w.toFixed(2) +
+      '" height="22" rx="3" ry="3" fill="' + color + '">' +
+      '<title>' + escapeHtml(d.name) + ': ' + escapeHtml(valueFormat(d[valueKey])) + '</title></rect>' +
+      '<text class="chart-label" x="' + (leftPad - 8) + '" y="' + (y + 15) + '" text-anchor="end">' + escapeHtml(d.name) + '</text>' +
+      '<text class="chart-value-label" x="' + (leftPad + w + 6) + '" y="' + (y + 15) + '" text-anchor="start">' + escapeHtml(valueFormat(d[valueKey])) + '</text>';
+  }).join('');
+
+  container.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H +
+    '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="' + escapeHtml(label) + '">' +
+    bars + '</svg>';
+}
+
+function renderPieChart(containerId, data) {
+  var container = document.getElementById(containerId);
+  var nonZero = data.filter(function(d) { return d.value > 0; });
+  if (nonZero.length === 0) {
+    container.innerHTML = '<div class="chart-empty">No data in current scope.</div>';
+    return;
+  }
+
+  var total = 0;
+  nonZero.forEach(function(d) { total += d.value; });
+
+  var cx = 100, cy = 100, R = 80, innerR = 45;
+  var channelColors = { "Resale": "#c9a961", "Donation": "#0d4d3c" };
+
+  var paths = [];
+
+  if (nonZero.length === 1) {
+    // Full annulus
+    var d = nonZero[0];
+    paths.push(
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="' + (channelColors[d.name] || '#155a47') + '" />' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="' + innerR + '" fill="#fff" />' +
+      '<text x="' + cx + '" y="' + cy + '" fill="#fff" font-family="Georgia, serif" font-size="20" font-weight="700" text-anchor="middle" dominant-baseline="central">100%</text>'
+    );
+  } else {
+    var startAngle = -Math.PI / 2;
+    nonZero.forEach(function(d) {
+      var fraction = d.value / total;
+      var endAngle = startAngle + fraction * Math.PI * 2;
+      var largeArc = fraction > 0.5 ? 1 : 0;
+      var x1 = cx + R * Math.cos(startAngle);
+      var y1 = cy + R * Math.sin(startAngle);
+      var x2 = cx + R * Math.cos(endAngle);
+      var y2 = cy + R * Math.sin(endAngle);
+      var ix1 = cx + innerR * Math.cos(endAngle);
+      var iy1 = cy + innerR * Math.sin(endAngle);
+      var ix2 = cx + innerR * Math.cos(startAngle);
+      var iy2 = cy + innerR * Math.sin(startAngle);
+      var path = 'M ' + x1.toFixed(2) + ' ' + y1.toFixed(2) +
+        ' A ' + R + ' ' + R + ' 0 ' + largeArc + ' 1 ' + x2.toFixed(2) + ' ' + y2.toFixed(2) +
+        ' L ' + ix1.toFixed(2) + ' ' + iy1.toFixed(2) +
+        ' A ' + innerR + ' ' + innerR + ' 0 ' + largeArc + ' 0 ' + ix2.toFixed(2) + ' ' + iy2.toFixed(2) + ' Z';
+      var midAngle = (startAngle + endAngle) / 2;
+      var labelR = (R + innerR) / 2;
+      var lx = cx + labelR * Math.cos(midAngle);
+      var ly = cy + labelR * Math.sin(midAngle);
+      var pct = (fraction * 100).toFixed(0);
+      paths.push(
+        '<path d="' + path + '" fill="' + (channelColors[d.name] || '#155a47') + '" stroke="#fff" stroke-width="2">' +
+        '<title>' + escapeHtml(d.name) + ': ' + fmtKg(d.value) + ' (' + pct + '%)</title></path>' +
+        (fraction > 0.08 ?
+          '<text x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) +
+          '" fill="#fff" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="central">' + pct + '%</text>'
+          : '')
+      );
+      startAngle = endAngle;
+    });
+  }
+
+  var legendHtml = nonZero.map(function(d) {
+    return '<div class="pie-legend-item">' +
+      '<div class="swatch" style="background: ' + (channelColors[d.name] || '#155a47') + ';"></div>' +
+      '<div class="lname">' + escapeHtml(d.name) + '</div>' +
+      '<div class="lvalue">' + fmtKg(d.value) + '</div>' +
+      '</div>';
+  }).join('');
+
+  container.innerHTML = '<div class="pie-wrap">' +
+    '<div class="pie-svg-wrap">' +
+    '<svg viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Disposal channel distribution">' +
+    paths.join('') + '</svg>' +
+    '</div>' +
+    '<div class="pie-legend">' + legendHtml + '</div>' +
+    '</div>';
+}
+
+function renderCharts() {
+  var filtered = getFiltered();
+  var byCategory = getByCategory(filtered);
+  var byChannel = getByChannel(filtered);
+
+  document.getElementById('cat-chart-sub').textContent =
+    byCategory.length + ' ' + (byCategory.length === 1 ? 'category' : 'categories') + ' in scope';
+
+  renderHorizontalBarChart('cat-co2-chart', byCategory, 'co2e', fmtKg, 'CO2e by category');
+  renderHorizontalBarChart('cat-items-chart', byCategory, 'items', function(v) { return fmt(v) + ' items'; }, 'Items by category');
+  renderPieChart('channel-chart', byChannel);
+}
+
+function renderPnL() {
+  var filtered = getFiltered();
+  var t = getTotals(filtered);
+
+  var cards = [
+    {
+      cls: 'proc',
+      ledger: 'Procurement \u00b7 OpEx',
+      h: 'Asset lifecycle &amp; supplier intelligence',
+      feeds: 'In current scope:',
+      signal: fmt(t.items) + '<small> data points</small>',
+      desc: 'Per-supplier, per-model lifecycle data feeds extended replacement cycles, sharper supplier scorecards, tighter brand-spec mandates. At portfolio scale: ~$30M+/yr value (Sustainable Procurement Charter aligned).'
+    },
+    {
+      cls: 'owner',
+      ledger: 'Development \u00b7 Owner Relations',
+      h: 'Recovered value &amp; HMA retention',
+      feeds: 'In current scope:',
+      signal: t.revenue > 0 ? fmtIDR(t.revenue) : 'Donation-only',
+      desc: 'Recovered value flows to owners via FF&amp;E reserves. ESG data they need for real-estate-fund disclosures. Strengthens Accor as the manager of choice.' + (t.revenue === 0 ? ' (Current filter shows donation pathway only.)' : '')
+    },
+    {
+      cls: 'fin',
+      ledger: 'Financing \u00b7 Ratings &amp; Margin',
+      h: 'Scope 3 Cat. 5 (currently uncovered)',
+      feeds: 'CO\u2082e in current scope:',
+      signal: fmtKg(t.co2e),
+      desc: "Waste sits in the 13% of Scope 3 Accor's SLB framework doesn't cover. Audit-ready data feeds Sustainalytics / MSCI scores anchoring the \u20ac1bn RCF margin and next-generation SLB baseline."
+    },
+    {
+      cls: 'csrd',
+      ledger: 'Reporting \u00b7 CSRD Scope',
+      h: 'Voluntary-scope evidence base',
+      feeds: 'Hotels in current scope:',
+      signal: t.hotels + '<small> of 5,800</small>',
+      desc: "Accor's 2025 award-winning CSRD report voluntarily includes managed/franchised hotels. Keeper supplies audit-ready data from exactly the properties hardest to source \u2014 the layer that holds the voluntary scope intact year-on-year."
+    }
+  ];
+
+  document.getElementById('pnl-grid').innerHTML = cards.map(function(c) {
+    return '<div class="pnl-card ' + c.cls + '">' +
+      '<div class="accent-bar"></div>' +
+      '<div class="ledger">' + c.ledger + '</div>' +
+      '<div class="h">' + c.h + '</div>' +
+      '<div class="feeds">' + c.feeds + '</div>' +
+      '<div class="signal">' + c.signal + '</div>' +
+      '<div class="desc">' + c.desc + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function renderProjection() {
+  var filtered = getFiltered();
+  var t = getTotals(filtered);
+  var accorPortfolio = 5800;
+  var targetHotels = Math.round(accorPortfolio * coverage / 100);
+  var currentHotels = 3;
+  var mult = targetHotels / currentHotels;
+
+  var projCO2 = t.co2e * mult;
+  var projItems = t.items * mult;
+  var projRevenue = t.revenue * mult;
+  var projPeople = t.people * mult;
+
+  var coverageBtns = [10, 25, 50, 100].map(function(c) {
+    return '<button class="' + (coverage === c ? 'active' : '') + '" data-coverage="' + c + '">' + c + '%</button>';
+  }).join('');
+
+  var projHtml =
+    '<div class="top">' +
+      '<div>' +
+        '<h3>Now imagine this <em>across the portfolio</em></h3>' +
+        '<div class="lede">A linear projection from the 3 verified pilots to ' + fmt(targetHotels) +
+        ' Accor properties at ' + coverage + '% coverage. This is the <strong>achievable avoidance</strong> Keeper measurably delivers \u2014 not the total Scope 3 Cat. 5 footprint (~110,000 t/yr). Useful as an order-of-magnitude framing \u2014 actual results vary by property type, size and asset mix.</div>' +
+      '</div>' +
+      '<div class="toggle">' + coverageBtns + '</div>' +
+    '</div>' +
+    '<div class="grid">' +
+      '<div class="stat">' +
+        '<div class="num">' + fmt(projCO2 / 1000) + '<small> t</small></div>' +
+        '<div class="lbl">CO\u2082e avoided / year</div>' +
+        '<div class="compare">' + mult.toFixed(0) + '\u00d7 current</div>' +
+      '</div>' +
+      '<div class="stat">' +
+        '<div class="num">' + fmt(projItems / 1000) + '<small>K</small></div>' +
+        '<div class="lbl">Items diverted / year</div>' +
+        '<div class="compare">at filtered scope</div>' +
+      '</div>' +
+      '<div class="stat">' +
+        '<div class="num">$' + fmt(projRevenue / 16500 / 1000) + '<small>K</small></div>' +
+        '<div class="lbl">Recovered value / year</div>' +
+        '<div class="compare">to hotel owners</div>' +
+      '</div>' +
+      '<div class="stat">' +
+        '<div class="num">' + (projPeople >= 1000 ? fmt(projPeople / 1000) + 'K' : fmt(projPeople)) + '<small>+</small></div>' +
+        '<div class="lbl">People supported / year</div>' +
+        '<div class="compare">community impact</div>' +
+      '</div>' +
+    '</div>';
+
+  var el = document.getElementById('projection');
+  el.innerHTML = projHtml;
+
+  var btns = el.querySelectorAll('.toggle button');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function() {
+      coverage = parseInt(this.getAttribute('data-coverage'), 10);
+      renderProjection();
+    });
+  }
+}
+
+function setupNotes() {
+  var ta = document.getElementById('notes-textarea');
+  var status = document.getElementById('save-status');
+  var timer = null;
+
+  try {
+    var saved = localStorage.getItem('keeper-accor-notes');
+    if (saved) ta.value = saved;
+  } catch (e) {
+    status.textContent = 'Saving disabled (private mode)';
+  }
+
+  ta.addEventListener('input', function() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function() {
+      try {
+        localStorage.setItem('keeper-accor-notes', ta.value);
+        var now = new Date();
+        status.textContent = 'Saved ' + now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+      } catch (e) {
+        status.textContent = 'Could not save (browser blocked storage)';
+      }
+    }, 600);
+  });
+}
+
+function renderAll() {
+  renderFilterBar();
+  renderScope();
+  renderStats();
+  renderPilotTable();
+  renderCharts();
+  renderPnL();
+  renderProjection();
+}
+
+document.getElementById('reset-btn').addEventListener('click', function() {
+  filters = { region: "All", brandTier: "All", category: "All", channel: "All" };
+  renderAll();
+});
+
+renderAll();
+setupNotes();
+</script>
+</body>
+</html>
